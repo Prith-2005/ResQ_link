@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResQ Map — Advanced Emergency Response</title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Routing CSS (Optional but good) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/Global.css">
+    
+    <style>
+        /* Base styles for dark theme consistency */
+        body { background: #050816; overflow: hidden; margin: 0; padding: 0; }
+        .dark { color-scheme: dark; }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="top-navbar">
+        <div class="nav-left">
+            <div class="brand">
+                <div class="brand-icon">🛡️</div>
+                <div class="brand-text">
+                    <h3>ResQLink</h3>
+                    <p>Emergency Network</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <button class="profile-btn" id="profileTrigger">
+                <i class="fas fa-user-circle"></i> <span id="navUserName">My Profile</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= MAIN MAP ================= -->
+    <main class="main-container">
+        <div class="map-box">
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <!-- ================= BOTTOM ACTION BAR ================= -->
+    <div class="bottom-actions">
+        <button id="sosBtn" class="action-btn sos-btn">
+            <i class="fas fa-bullhorn"></i> SOS
+        </button>
+        <a href="report.html" style="text-decoration: none;">
+            <button class="action-btn report-btn">
+                <i class="fas fa-exclamation-triangle"></i> Report
+            </button>
+        </a>
+    </div>
+
+    <!-- ================= PROFILE DROPDOWN ================= -->
+    <div id="profilePanel" class="profile-panel">
+        <div class="profile-header">
+            <div class="avatar" id="userAvatar">U</div>
+            <div class="user-info">
+                <h3 id="panelUserName">User Name</h3>
+                <p id="memberSince">Member since 2025</p>
+            </div>
+        </div>
+
+        <div class="profile-menu">
+            <a href="user.html" class="menu-btn" id="dashboardLink">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="user.html#settings" class="menu-btn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <hr class="menu-divider">
+            <a href="trial/landing.html" class="menu-btn logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Routing JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <!-- JS -->
+    <script src="index.js"></script>
+
+</body>
+</html>

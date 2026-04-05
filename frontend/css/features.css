@@ -1,0 +1,64 @@
+/* ================= FEATURES ================= */
+.features {
+    padding: 80px 8%;
+    background: #05060f;
+    color: white;
+    text-align: center;
+}
+
+/* TITLE */
+.features h2 {
+    font-size: 34px;
+    margin-bottom: 40px;
+}
+
+/* GRID */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+/* BOX */
+.feature-box {
+    background: #0d1020;
+    padding: 25px;
+    border-radius: 15px;
+
+    text-align: left;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    transition: 0.3s;
+}
+
+/* ICON */
+.feature-box i {
+    font-size: 22px;
+    color: red;
+    margin-bottom: 15px;
+}
+
+/* TITLE */
+.feature-box h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* TEXT */
+.feature-box p {
+    font-size: 14px;
+    color: #aaa;
+}
+
+/* HOVER EFFECT */
+.feature-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(255,0,0,0.2);
+}
+
+/* SPECIAL HIGHLIGHT BOX (like your middle one) */
+.feature-box.highlight {
+    border: 1px solid rgba(255,0,0,0.4);
+    box-shadow: 0 0 20px rgba(255,0,0,0.2);
+}

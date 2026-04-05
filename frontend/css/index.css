@@ -1,0 +1,180 @@
+/* ===============================================================
+   ResQLink — Professional Map Page Styles
+   Aesthetic: Dark Mode, Glassmorphism, Inter Font
+   =============================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-deep:      #050816;
+    --bg-surface:   #0a0f1d;
+    --text-primary: #f8fafc;
+    --text-secondary:#94a3b8;
+    --accent-red:   #ef4444;
+    --accent-red-glow: rgba(239, 68, 68, 0.4);
+    --glass-bg:     rgba(15, 23, 42, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --radius-md:    16px;
+    --radius-lg:    24px;
+    --shadow-xl:    0 20px 40px rgba(0, 0, 0, 0.5);
+    --transition:   0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── BASE ────────────────────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* ─── MAIN CONTAINER (MAP HOLDER) ───────────────────────── */
+.main-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    padding-top: 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.map-box {
+    width: 100%;
+    max-width: 1400px;
+    height: 100%;
+    background: #000;
+    border: 1px solid var(--accent-red);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 
+        0 0 40px rgba(239, 68, 68, 0.15),
+        inset 0 0 20px rgba(239, 68, 68, 0.05);
+    transition: var(--transition);
+}
+
+/* ─── LEAFLET CUSTOMIZATION ───────────────────────────────── */
+#map {
+    width: 100%;
+    height: 100%;
+    background: #0b0f1a;
+}
+
+.leaflet-container {
+    background: #000;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom Zoom Controls */
+.leaflet-control-zoom {
+    border: none !important;
+    margin-top: 20px !important;
+}
+
+.leaflet-control-zoom-in, 
+.leaflet-control-zoom-out {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border) !important;
+    color: #fff !important;
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+}
+
+/* ─── BOTTOM ACTION BAR ───────────────────────────────────── */
+.bottom-actions {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16px;
+    z-index: 10000;
+    padding: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 99px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateX(-50%) translateY(50px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.action-btn {
+    padding: 14px 32px;
+    font-size: 15px;
+    font-weight: 800;
+    border: none;
+    border-radius: 99px;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.sos-btn {
+    background: linear-gradient(135deg, var(--accent-red), #ff2d2d);
+    box-shadow: 0 4px 15px var(--accent-red-glow);
+    animation: pulse-red 2s infinite;
+}
+
+.report-btn {
+    background: linear-gradient(135deg, #ff8c00, #ff4500);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+.action-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    filter: brightness(1.1);
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* ─── MARKERS ───────────────────────────────────────────── */
+.marker-pin {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    border: 2px solid white;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.marker-pin i { font-size: 14px; }
+
+/* ─── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .main-container { padding: 12px; padding-top: 80px; }
+    .map-box { height: calc(100vh - 120px); border: none; }
+    .bottom-actions { width: 90%; gap: 10px; padding: 10px; bottom: 20px; }
+    .action-btn { flex: 1; padding: 12px 10px; font-size: 13px; justify-content: center; }
+}

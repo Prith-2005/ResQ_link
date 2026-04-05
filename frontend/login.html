@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — ResQLink Advanced Emergency Response</title>
+    <meta name="description" content="Access your ResQLink account to manage emergencies and respond to alerts.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LEFT SIDE: BRANDING -->
+    <div class="left">
+        <div class="brand">
+            <div class="brand-icon">🛡️</div>
+            <h1>ResQLink</h1>
+            <p>
+                The advanced emergency response network connecting victims, responders, and facilities in real-time.
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE: FORM -->
+    <div class="right">
+        <div class="card">
+            <div class="tabs">
+                <button class="active">Login</button>
+                <button onclick="location.href='register.html'">Register</button>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <div class="row">
+                    <a href="#" class="forgot">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary" id="loginBtn">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="divider">or</div>
+
+            <div class="back">
+                <a href="trial/landing.html"><i class="fas fa-arrow-left"></i> Back to home</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- SCRIPT -->
+<script>
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => { toast.classList.remove("show"); }, 3000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("loginForm");
+    const btn = document.getElementById("loginBtn");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Store user data
+                const userData = {
+                    name: data.user.name || "User",
+                    email: data.user.email,
+                    location: data.user.location || "Asansol, West Bengal",
+                    memberSince: data.user.memberSince || "Jan 2025",
+                    role: data.user.role
+                };
+                localStorage.setItem("resqlink_user", JSON.stringify(userData));
+                
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                }
+
+                showToast("Login Successful ✅", "success");
+
+                setTimeout(() => {
+                    if (data.user.role === "admin") {
+                        window.location.href = "admin.html";
+                    } else if (data.user.role === "responder") {
+                        window.location.href = "index.html"; // Or responder dashboard if exists
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                }, 1200);
+
+            } else {
+                showToast(data.message || "Invalid credentials ❌", "error");
+            }
+
+        } catch (err) {
+            console.error(err);
+            showToast("Server unreachable ❌", "error");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = "Sign In";
+        }
+    });
+});
+</script>
+
+</body>
+</html>

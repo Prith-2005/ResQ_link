@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQLink — Emergency Contacts</title>
+  <meta name="description" content="Manage your emergency contacts for ResQLink SOS alerts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/emgCont.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <button class="back-btn" onclick="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <span class="nav-icon">🛡️</span>
+    <div>
+      <h2>ResQLink</h2>
+      <p>Emergency Contact Setup</p>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <a href="index.html" class="icon-btn">← Back to Map</a>
+  </div>
+</nav>
+
+<!-- ================= TOAST ================= -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="page-container">
+
+  <!-- Info Banner -->
+  <div class="info-banner">
+    <div class="info-icon">📡</div>
+    <div>
+      <strong>How SOS Works</strong>
+      <p>When you press the SOS button on the map, a WhatsApp emergency message with your live GPS location is sent to <em>all</em> contacts listed here.</p>
+    </div>
+  </div>
+
+  <!-- Add Contact Card -->
+  <div class="panel-card">
+    <div class="panel-hd">
+      <span class="panel-emoji">➕</span>
+      <h3>Add Emergency Contact</h3>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Contact Name <span class="req">*</span></label>
+        <input type="text" id="newName" placeholder="e.g. Mom, Dad, Partner…">
+      </div>
+      <div class="form-group">
+        <label>Phone Number (WhatsApp) <span class="req">*</span></label>
+        <input type="text" id="newNumber" placeholder="+91XXXXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label>Relation</label>
+        <input type="text" id="newRelation" placeholder="e.g. Family, Friend, Doctor">
+      </div>
+    </div>
+
+    <button class="save-btn" id="addBtn" onclick="addContact()">
+      <i class="fas fa-plus-circle"></i> Save Contact
+    </button>
+  </div>
+
+  <!-- Contacts List Card -->
+  <div class="panel-card">
+    <div class="panel-hd">
+      <span class="panel-emoji">📞</span>
+      <h3>Saved Contacts</h3>
+      <span class="count-badge" id="contactCount">0</span>
+    </div>
+
+    <div id="loadingState" class="loader-wrap">
+      <div class="spinner"></div>
+      <p>Loading contacts…</p>
+    </div>
+
+    <div id="contactsList" class="contacts-list"></div>
+
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <span>📵</span>
+      <p>No emergency contacts added yet.<br>Add one above so SOS alerts can reach your trusted circle.</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="emgCont.js"></script>
+</body>
+</html>

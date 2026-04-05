@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Incident Report — ResQLink Advanced Emergency Network</title>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="report.css">
+    
+    <style>
+        .dark { color-scheme: dark; } /* Base style to ensure dark mode support */
+        
+        /* Specific button styling for incident page */
+        .incident-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .incident-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .incident-card i {
+            font-size: 48px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+            transition: var(--transition);
+        }
+
+        .incident-card span {
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .incident-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Color variations */
+        .card-fire { border-bottom: 4px solid #dc2626; }
+        .card-fire:hover { background: rgba(220, 38, 38, 0.1); border-color: #dc2626; }
+        .card-fire i { color: #dc2626; }
+
+        .card-accident { border-bottom: 4px solid #3b82f6; }
+        .card-accident:hover { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+        .card-accident i { color: #3b82f6; }
+
+        .card-medical { border-bottom: 4px solid #16a34a; }
+        .card-medical:hover { background: rgba(22, 163, 74, 0.1); border-color: #16a34a; }
+        .card-medical i { color: #16a34a; }
+
+        .card-crime { border-bottom: 4px solid #f59e0b; }
+        .card-crime:hover { background: rgba(245, 158, 11, 0.1); border-color: #f59e0b; }
+        .card-crime i { color: #f59e0b; }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= TOP BAR ================= -->
+    <header class="top-bar">
+        <div class="left">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Back to map
+            </button>
+        </div>
+
+        <div class="right logo-box" onclick="window.location.href='index.html'">
+            <span class="logo-icon">🛡️</span>
+            <div>
+                <h2>ResQLink</h2>
+                <p>Emergency Network</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- MODE SWITCH -->
+        <div class="tab-switch-container">
+            <div class="tab-switch">
+                <button class="tab-btn active">
+                    <i class="fas fa-bolt"></i> Incident
+                </button>
+                <button class="tab-btn" onclick="window.location.href='report.html'">
+                    <i class="fas fa-wind"></i> Disaster
+                </button>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1>Quick Incident Report</h1>
+            <div class="underline"></div>
+            <p style="color: #94a3b8; margin-top: 16px; font-weight: 500;">
+                Report an emergency in under 5 seconds. Every second counts.
+            </p>
+        </div>
+
+        <div class="container">
+            <div class="incident-grid">
+                <!-- Fire -->
+                <div class="incident-card card-fire" onclick="sendIncident('Fire', this)">
+                    <i class="fas fa-fire"></i>
+                    <span>Fire Alert</span>
+                </div>
+
+                <!-- Accident -->
+                <div class="incident-card card-accident" onclick="sendIncident('Accident', this)">
+                    <i class="fas fa-car-crash"></i>
+                    <span>Accident</span>
+                </div>
+
+                <!-- Medical -->
+                <div class="incident-card card-medical" onclick="sendIncident('Medical', this)">
+                    <i class="fas fa-hand-holding-medical"></i>
+                    <span>Medical</span>
+                </div>
+
+                <!-- Crime -->
+                <div class="incident-card card-crime" onclick="sendIncident('Crime', this)">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>Crime Emergency</span>
+                </div>
+            </div>
+
+            <div id="statusMsg" style="text-align: center; margin-top: 40px; font-weight: 600; font-size: 14px; color: #94a3b8; display: none;"></div>
+        </div>
+    </main>
+
+    <!-- SCRIPT -->
+    <script>
+        async function sendIncident(type, element) {
+            const user = JSON.parse(localStorage.getItem("resqlink_user"));
+            if (!user) {
+                alert("Please login first ❌");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const statusMsg = document.getElementById("statusMsg");
+            statusMsg.style.display = "block";
+            statusMsg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing GPS capture...';
+            
+            // Add visual active state to the card
+            const cards = document.querySelectorAll('.incident-card');
+            cards.forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+
+            if (!navigator.geolocation) {
+                statusMsg.innerHTML = "❌ Geolocation not supported by your browser.";
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                statusMsg.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Dispatching report to control center...';
+                
+                const data = {
+                    name: user.name,
+                    userEmail: user.email,
+                    reportType: "REPORT",
+                    disasterType: type,
+                    locationName: "Auto-detected",
+                    level: "high",
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude
+                };
+
+                try {
+                    const res = await fetch("http://localhost:5000/api/alerts", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (res.ok) {
+                        statusMsg.innerHTML = "✅ Incident reported successfully! Redirecting...";
+                        setTimeout(() => { window.location.href = "user.html"; }, 1500);
+                    } else {
+                        statusMsg.innerHTML = "❌ Server rejected report. Please try again.";
+                    }
+                } catch (err) {
+                    console.error(err);
+                    statusMsg.innerHTML = "❌ Network error. Check your connection.";
+                }
+            }, () => {
+                statusMsg.innerHTML = "❌ Location access denied. Enable GPS to report incidents.";
+            }, { enableHighAccuracy: true });
+        }
+    </script>
+
+</body>
+</html>

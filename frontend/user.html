@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQLink — My Dashboard</title>
+  <meta name="description" content="ResQLink user dashboard — view your alerts, trust score, and emergency contacts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="user.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">🛡️</span>
+    <div>
+      <h2>ResQLink</h2>
+      <p>My Dashboard</p>
+    </div>
+  </div>
+
+  <div class="live-badge">
+    <span class="live-dot"></span> LIVE
+  </div>
+
+  <div class="nav-right">
+    <a href="index.html" class="icon-btn">← Back to Map</a>
+    <button class="icon-btn logout-btn" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<!-- ================= TOAST ================= -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ================= LAYOUT ================= -->
+<div class="dashboard-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <div class="side-profile">
+      <div class="avatar-lg" id="sideAvatar">--</div>
+      <h3 id="sideName">User</h3>
+      <p id="sideRole" class="side-role">Member</p>
+    </div>
+
+    <nav class="side-nav">
+      <div class="side-item active" id="nav-profile" onclick="showSection('profile', this)">
+        <i class="fas fa-user"></i> Profile
+      </div>
+      <div class="side-item" id="nav-contacts" onclick="showSection('contacts', this)">
+        <i class="fas fa-phone-alt"></i> Emergency Contacts
+      </div>
+      <div class="side-item" id="nav-settings" onclick="showSection('settings', this)">
+        <i class="fas fa-cog"></i> Account Settings
+      </div>
+      <div class="side-item logout-item" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </div>
+    </nav>
+
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <!-- ======= PROFILE SECTION ======= -->
+    <div id="profileSection" class="section-wrapper">
+
+      <!-- Profile Header Card -->
+      <div class="panel-card profile-hero">
+        <div class="avatar-xl" id="avatar">--</div>
+        <div class="profile-meta">
+          <h1 id="userName">Loading...</h1>
+          <p id="userDetails" class="muted">Loading user details...</p>
+        </div>
+        <button class="icon-btn ml-auto" onclick="showSection('settings', document.getElementById('nav-settings'))">
+          <i class="fas fa-pen"></i> Edit Profile
+        </button>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-icon sos-icon">🚨</div>
+          <div>
+            <div class="stat-value" id="sosCount">0</div>
+            <div class="stat-label">SOS Sent</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon rep-icon">📋</div>
+          <div>
+            <div class="stat-value report-val" id="distressCount">0</div>
+            <div class="stat-label">Disaster Reported</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon res-icon">✅</div>
+          <div>
+            <div class="stat-value green-val" id="resolvedCount">0</div>
+            <div class="stat-label">Resolved Cases</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon cont-icon">📞</div>
+          <div>
+            <div class="stat-value blue-val" id="contactCount">0</div>
+            <div class="stat-label">Emergency Contacts</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Trust Score + Alerts in 2-col grid -->
+      <div class="double-grid">
+
+        <!-- Trust Score -->
+        <div class="panel-card trust-card">
+          <div class="panel-hd">
+            <span class="panel-emoji">🔐</span>
+            <h3>Trust Score</h3>
+          </div>
+          <div class="trust-body">
+            <div class="ring-wrap">
+              <svg class="ring-svg" viewBox="0 0 150 150">
+                <circle cx="75" cy="75" r="65" class="ring-bg"/>
+                <circle cx="75" cy="75" r="65" id="trustCircle" class="ring-progress"/>
+              </svg>
+              <div class="ring-label" id="trustLabel">0%</div>
+            </div>
+            <p class="trust-desc muted">Based on your verified reports and resolved cases</p>
+          </div>
+        </div>
+
+        <!-- Quick Settings -->
+        <div class="panel-card">
+          <div class="panel-hd">
+            <span class="panel-emoji">⚙️</span>
+            <h3>Quick Settings</h3>
+          </div>
+          <div class="toggle-list">
+            <div class="toggle-row">
+              <span>Auto-SOS Detection</span>
+              <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+            <div class="toggle-row">
+              <span>Share Location with Responders</span>
+              <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+            <div class="toggle-row">
+              <span>Push Notifications</span>
+              <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+          </div>
+
+          <!-- Emergency contacts shortcut button -->
+          <button class="emg-shortcut-btn" onclick="window.location.href='emgCont.html'">
+            <i class="fas fa-phone-alt"></i> Configure Emergency Setup (Dedicated Page)
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Alerts Table Card -->
+      <section class="panel-section">
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3>🚨 My Alerts (SOS + Reports)</h3>
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="all">All</button>
+              <button class="filter-tab" data-filter="SOS">SOS</button>
+              <button class="filter-tab" data-filter="REPORT">Reports</button>
+            </div>
+          </div>
+
+          <div id="alertLoader" class="loader-wrap">
+            <div class="spinner"></div>
+            <p>Loading alerts…</p>
+          </div>
+
+          <div class="table-scroll">
+            <table class="data-table" id="alertTableWrap">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Disaster</th>
+                  <th>Location</th>
+                  <th>Level</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="historyTable"></tbody>
+            </table>
+          </div>
+
+          <div id="alertEmpty" class="empty-state" style="display:none;">
+            <span>📭</span>
+            <p>No alerts yet — stay safe!</p>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /profileSection -->
+
+    <!-- ======= EMERGENCY CONTACTS SECTION ======= -->
+    <div id="contactsSection" class="section-wrapper" style="display:none;">
+
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>📞 Emergency Contacts</h3>
+          <p class="panel-sub">These contacts will receive a WhatsApp SOS alert with your location.</p>
+        </div>
+
+        <!-- Add Contact Form -->
+        <div class="add-contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Contact Name</label>
+              <input type="text" id="newContactName" placeholder="e.g. Mom, Dad, Doctor…">
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" id="newContactNumber" placeholder="+91XXXXXXXXXX">
+            </div>
+            <div class="form-group">
+              <label>Relation</label>
+              <input type="text" id="newContactRelation" placeholder="e.g. Family, Friend…">
+            </div>
+            <button class="btn btn-add" id="addContactBtn" onclick="addContact()">
+              <i class="fas fa-plus"></i> Add
+            </button>
+          </div>
+        </div>
+
+        <!-- Contacts List -->
+        <div id="contactsLoader" class="loader-wrap" style="display:none;">
+          <div class="spinner"></div>
+        </div>
+
+        <div id="contactsList" class="contacts-list"></div>
+
+        <div id="contactsEmpty" class="empty-state" style="display:none;">
+          <span>📵</span>
+          <p>No emergency contacts added yet. Add one above!</p>
+        </div>
+
+      </div>
+    </div><!-- /contactsSection -->
+
+    <!-- ======= SETTINGS SECTION ======= -->
+    <div id="settingsSection" class="section-wrapper" style="display:none;">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>⚙️ Account Settings</h3>
+        </div>
+        <div class="setting-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="editName" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="editLocation" placeholder="City, State">
+          </div>
+          <div class="form-group">
+            <label>Member Since</label>
+            <input type="text" id="editSince" placeholder="e.g. Jan 2025">
+          </div>
+          <button class="btn btn-save" onclick="saveProfile()">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div><!-- /settingsSection -->
+
+  </main>
+</div>
+
+<script src="user.js"></script>
+</body>
+</html>

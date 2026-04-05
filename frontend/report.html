@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Report — ResQLink Advanced Emergency Network</title>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="report.css">
+    
+    <style>
+        .dark { color-scheme: dark; } /* Base style to ensure dark mode support */
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= TOP BAR ================= -->
+    <header class="top-bar">
+        <div class="left">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Back to map
+            </button>
+        </div>
+
+        <div class="right logo-box" onclick="window.location.href='index.html'">
+            <span class="logo-icon">🛡️</span>
+            <div>
+                <h2>ResQLink</h2>
+                <p>Emergency Network</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- MODE SWITCH -->
+        <div class="tab-switch-container">
+            <div class="tab-switch">
+                <button class="tab-btn" onclick="window.location.href='incident.html'">
+                    <i class="fas fa-bolt"></i> Incident
+                </button>
+                <button class="tab-btn active">
+                    <i class="fas fa-wind"></i> Disaster
+                </button>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1>Report Massive Disaster</h1>
+            <div class="underline"></div>
+            <p style="color: #94a3b8; margin-top: 16px; font-weight: 500;">
+                Provide mission-critical data for large-scale emergency response.
+            </p>
+        </div>
+
+        <div class="container" id="reportSections">
+
+            <!-- STEP 1: DISASTER TYPE -->
+            <section class="card">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    Choose Disaster Type
+                </div>
+                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
+                    Select the primary category of the current emergency situation.
+                </p>
+
+                <div class="grid" id="disasterGrid">
+                    <div class="disaster-card" data-val="Flood"><i class="fas fa-water"></i><br>Flood</div>
+                    <div class="disaster-card" data-val="Earthquake"><i class="fas fa-globe-americas"></i><br>Earthquake</div>
+                    <div class="disaster-card" data-val="Cyclone"><i class="fas fa-wind"></i><br>Cyclone / Storm</div>
+                    <div class="disaster-card" data-val="Landslide"><i class="fas fa-mountain"></i><br>Landslide</div>
+                </div>
+            </section>
+
+            <!-- STEP 2: EMERGENCY LEVEL -->
+            <section class="card">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    Severity of Emergency
+                </div>
+                <div class="emergency-level">
+                    <button class="level-btn low" data-level="low">Low</button>
+                    <button class="level-btn medium" data-level="medium">Medium</button>
+                    <button class="level-btn high active" data-level="high">High Risk</button>
+                </div>
+            </section>
+
+            <!-- STEP 3: LOCATION NAME -->
+            <section class="card">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    Location Intelligence
+                </div>
+                <input id="locationName" type="text" placeholder="e.g. Asansol South, near District Court">
+            </section>
+
+            <!-- STEP 4: GPS CAPTURE -->
+            <section class="card">
+                <div class="step-title">
+                    <span class="step-number">4</span>
+                    Coordinate Capture
+                </div>
+                <button id="gpsBtn" class="gps-btn">
+                    <i class="fas fa-location-arrow"></i> Capture Precise Location
+                </button>
+                <div id="locationDisplay" class="location-box">
+                    Location coordinates not captured yet.
+                </div>
+            </section>
+
+            <!-- FINAL: SEND -->
+            <button class="send-btn" id="sendReportBtn">
+                <i class="fas fa-bullhorn"></i> Dispatch Disaster Report
+            </button>
+
+            <!-- Error message container -->
+            <div id="errorMsg" style="text-align: center; color: #ef4444; font-size: 14px; margin-top: 16px; display: none;"></div>
+        </div>
+    </main>
+
+    <!-- JS -->
+    <script src="report.js"></script>
+
+</body>
+</html>

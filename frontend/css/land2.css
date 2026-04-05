@@ -1,0 +1,49 @@
+/* ================= NAVBAR ================= */
+.navbar {
+  width: 100%;
+  padding: 20px 8%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #111;
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid #222;
+}
+
+.logo-icon {
+  font-size: 22px;
+}
+
+.logo h3 {
+  font-size: 14px;
+}
+
+.logo p {
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* BUTTON (RIGHT SIDE) */
+.nav-btn {
+  background: #111;
+  border: 1px solid #333;
+  padding: 10px 20px;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+}
+
+/* NO HOVER (as per your theme) */
+.nav-btn:hover {
+  background: #111;
+}

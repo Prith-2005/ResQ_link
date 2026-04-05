@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — ResQLink Advanced Emergency Response</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LEFT -->
+    <div class="left">
+        <div class="brand">
+            <div class="brand-icon">🛡️</div>
+            <h1>ResQLink</h1>
+            <p>
+                Join the emergency network that connects thousands of survivors and responders daily across the globe.
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+        <div class="card" id="authCard">
+            <div class="tabs">
+                <button onclick="location.href='login.html'">Login</button>
+                <button class="active">Register</button>
+            </div>
+
+            <!-- REGISTRATION FORM -->
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-primary" id="registerBtn">
+                    Create Account
+                </button>
+            </form>
+
+            <!-- OTP VERIFICATION FORM (HIDDEN START) -->
+            <form id="verifyForm" style="display: none;">
+                <div class="brand-icon" style="font-size: 32px; text-align: center; margin-bottom: 12px;">📩</div>
+                <h3 style="text-align: center; margin-bottom: 8px;">Verify Your Email</h3>
+                <p style="text-align: center; font-size: 13px; color: #94a3b8; margin-bottom: 24px;">
+                    We've sent a code to your email address.
+                </p>
+
+                <div class="form-group">
+                    <label>Verification Code</label>
+                    <input type="text" id="otp" placeholder="Enter 6-digit OTP" required style="text-align: center; letter-spacing: 4px; font-size: 18px;">
+                </div>
+
+                <button type="submit" class="btn-primary" id="verifyBtn">
+                    Verify & Continue
+                </button>
+                
+                <div class="back">
+                    <a href="#" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Wrong email? Go back</a>
+                </div>
+            </form>
+
+            <div class="divider">or</div>
+
+            <div class="back">
+                <a href="trial/landing.html"><i class="fas fa-arrow-left"></i> Home</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- SCRIPTS -->
+<script>
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => { toast.classList.remove("show"); }, 3000);
+}
+
+function selectRole(button) {
+    const group = button.closest(".role-group");
+    group.querySelectorAll(".role-btn").forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const regForm = document.getElementById("registerForm");
+    const verForm = document.getElementById("verifyForm");
+    const regBtn  = document.getElementById("registerBtn");
+    const verBtn  = document.getElementById("verifyBtn");
+
+    let currentEmail = "";
+
+    // 1. REGISTRATION SUBMIT
+    regForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const fullName = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const role = "victim"; // Default role: victim
+
+        currentEmail = email;
+        regBtn.disabled = true;
+        regBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending OTP...';
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ fullName, email, password, role })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast("OTP sent successfully ✅", "success");
+                regForm.style.display = "none";
+                verForm.style.display = "block";
+            } else {
+                showToast(data.message || "Registration failed ❌", "error");
+            }
+        } catch (err) {
+            console.error(err);
+            showToast("Server unreachable ❌", "error");
+        } finally {
+            regBtn.disabled = false;
+            regBtn.innerHTML = "Create Account";
+        }
+    });
+
+    // 2. VERIFICATION SUBMIT
+    verForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const otp = document.getElementById("otp").value;
+
+        verBtn.disabled = true;
+        verBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Verifying...';
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: currentEmail, otp })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast("Email Verified ✅", "success");
+                setTimeout(() => { window.location.href = "login.html"; }, 1500);
+            } else {
+                showToast(data.message || "Invalid OTP ❌", "error");
+            }
+        } catch (err) {
+            console.error(err);
+            showToast("Verification failed ❌", "error");
+        } finally {
+            verBtn.disabled = false;
+            verBtn.innerHTML = "Verify & Continue";
+        }
+    });
+});
+</script>
+
+</body>
+</html>

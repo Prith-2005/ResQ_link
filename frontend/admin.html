@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQLink — Admin Panel</title>
+  <meta name="description" content="ResQLink Admin Panel — manage disaster alerts, verify reports, and assign emergency responders.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">🛡️</span>
+    <div>
+      <h2>ResQLink</h2>
+      <p>Admin Control Center</p>
+    </div>
+  </div>
+
+  <div class="nav-center">
+    <span id="liveIndicator" class="live-badge">
+      <span class="live-dot"></span> LIVE
+    </span>
+  </div>
+
+  <div class="nav-right">
+    <button id="refreshBtn" class="icon-btn" title="Refresh">↻ Refresh</button>
+    <a href="index.html" class="icon-btn logout-btn">← Back to Map</a>
+  </div>
+</nav>
+
+<!-- ================= TOAST ================= -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ================= MAIN ================= -->
+<div class="admin-container">
+
+  <!-- ================= STATS ================= -->
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-icon pending-icon">⏳</div>
+      <div>
+        <div class="stat-value" id="activeCount">0</div>
+        <div class="stat-label">Pending Alerts</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon verified-icon">✅</div>
+      <div>
+        <div class="stat-value verified-val" id="verifiedCount">0</div>
+        <div class="stat-label">Verified Reports</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon assigned-icon">🚑</div>
+      <div>
+        <div class="stat-value assigned-val" id="assignedCount">0</div>
+        <div class="stat-label">Assigned</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon resolved-icon">🏁</div>
+      <div>
+        <div class="stat-value resolved-val" id="resolvedCount">0</div>
+        <div class="stat-label">Resolved</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon false-icon">🚩</div>
+      <div>
+        <div class="stat-value false-val" id="falseCount">0</div>
+        <div class="stat-label">False Alerts</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= ALERT SECTION ================= -->
+  <section class="panel-section">
+    <div class="panel-card">
+
+      <div class="panel-header">
+        <h3>🚨 Alert Management</h3>
+        <div class="panel-controls">
+          <input id="searchInput" type="text" placeholder="🔍 Search by location or type…" class="search-input">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="pending">Pending</button>
+            <button class="filter-tab" data-filter="verified">Verified</button>
+            <button class="filter-tab" data-filter="assigned">Assigned</button>
+            <button class="filter-tab" data-filter="resolved">Resolved</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="alertLoader" class="loader-wrap">
+        <div class="spinner"></div>
+        <p>Loading alerts…</p>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data-table" id="alertTableWrap">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date &amp; Time</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th>Level</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="alertTable"></tbody>
+        </table>
+      </div>
+
+      <div id="alertEmpty" class="empty-state" style="display:none;">
+        <span>📭</span>
+        <p>No alerts match your filter.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= RESPONDER SECTION ================= -->
+  <section class="panel-section">
+    <div class="panel-card">
+
+      <div class="panel-header">
+        <h3>🚑 Responder Management</h3>
+        <p class="panel-sub">Only verified &amp; assigned alerts are shown here.</p>
+      </div>
+
+      <div id="responderLoader" class="loader-wrap" style="display:none;">
+        <div class="spinner"></div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data-table responder-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th>Assigned Responders</th>
+              <th>Assign New</th>
+            </tr>
+          </thead>
+          <tbody id="responderTable"></tbody>
+        </table>
+      </div>
+
+      <div id="responderEmpty" class="empty-state" style="display:none;">
+        <span>✅</span>
+        <p>No verified or assigned alerts. Verify alerts above to assign responders.</p>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /admin-container -->
+
+<!-- ================= SCRIPT ================= -->
+<script src="admin.js"></script>
+
+</body>
+</html>
